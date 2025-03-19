@@ -21,7 +21,7 @@ def hand_recognition():
         if not ret:
             break
 
-        # Convert BGR to RGB for MediaPipe
+        # Convert BGR to RGB for mediapipe
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Process frame and detect hands
@@ -50,27 +50,22 @@ def hand_recognition():
                 middle_x, middle_y = int(middle_tip.x * w), int(middle_tip.y * h)
 
 
-                # Gesture Recognition
-                # if thumb_y < wrist.y and index_y < wrist.y:  # Hand fully open
-                #     gesture = "Open Hand"
+                # Gesture recognition
                 if abs(thumb_x - index_x) > 30 and abs(thumb_y - index_y) > 30 and abs(middle_x - index_x) > 30 and abs(middle_y - index_y) > 30  :  # Fingers touching
-                    gesture = "Open hand"
-
-                # elif thumb_x < index_x:  # Thumb up
-                #     gesture = "Thumbs Up"
+                    gesture = "open hand"
                 elif thumb_y < index_y:  # Thumb up
-                    gesture = "Thumbs Up"
+                    gesture = "thumbs up"
                 elif abs(thumb_x - index_x) < 30 and abs(thumb_y - index_y) < 30:  # Fingers touching
-                    gesture = "Pinching"
+                    gesture = "pinching"
                 else:
-                    gesture = "Unknown"
+                    gesture = "unknown"
 
                 # Display gesture on screen
                 cv2.putText(frame, f'Gesture: {gesture}', (50, 50),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         # Show the output
-        cv2.imshow("Hand Gesture Recognition", frame)
+        cv2.imshow("Hand gesture recognition", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):  # Press 'q' to exit
             break
