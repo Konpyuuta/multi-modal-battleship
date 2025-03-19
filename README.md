@@ -1,6 +1,6 @@
 # Multi-Modal Battleship
 
-The project has been developed as part of the M. Sc. course "Multi-Modal User Interfaces by Maurice Amon, Allessia Busshard and Lucas Cornet.
+The project has been developed as part of the M. Sc. course "Multi-Modal User Interfaces by Maurice Amon, Alessia Bussard and Lucas Cornet.
 
 
 
