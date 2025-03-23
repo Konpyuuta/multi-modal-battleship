@@ -14,6 +14,8 @@ from model.states.SecondPlayerTurnState import SecondPlayerTurnState
 
 class GameHandler:
 
+    _game = None
+
     _start_state = None
 
     _first_player_turn_state = None
@@ -24,18 +26,33 @@ class GameHandler:
 
     _current_state = None
 
-    def __init__(self, game):
-        self._start_state = StartGameState(game)
-        self._turn_state = FirstPlayerTurnState(game)
-        self._second_player_turn_state = SecondPlayerTurnState(game)
-        self._game_over_state = GameOverState(game)
+
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(GameHandler, cls).__new__(cls)
+        return cls.instance
+
+    def __init__(self):
+        self._start_state = StartGameState()
+        self._turn_state = FirstPlayerTurnState()
+        self._second_player_turn_state = SecondPlayerTurnState()
+        self._game_over_state = GameOverState()
         self._current_state = self._start_state
 
 
-    def handle(self):
+    def set_game(self, game):
+        self._game = game
+
+    def handle(self, object):
         is_game_over = False
         while not is_game_over:
-            self._current_state.handle_action()
+            self._current_state.handle_action(object)
+
+
+
+
+    def get_game(self):
+        return self._game
 
 
     def set_current_state(self, state):

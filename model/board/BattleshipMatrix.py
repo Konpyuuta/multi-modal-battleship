@@ -9,7 +9,8 @@ from random import randrange
 class BattleshipMatrix():
 
     # The values of the matrix can be 3 different values ..
-    # 0: No ship, no bomb landed. 1: A ship is there. 2: A ship is there and a bomb landed on it.
+    # 0: No ship, no bomb landed.
+    # -1: No ship, a bomb landed. 1: A ship is there. 2: A ship is there and a bomb landed on it.
     _matrix = None
     # All different sizes of battleships ..
     _battleship_sizes = [5, 5, 4, 3, 3, 2, 2]
@@ -24,6 +25,12 @@ class BattleshipMatrix():
 
     def set_matrix(self, matrix):
         self._matrix = matrix
+
+
+    def has_bomb_been_placed(self, column, row):
+        if self._matrix[column][row] == -1 or self._matrix[column][row] == 2:
+            return True
+        return False
 
     def set_bomb_in_matrix(self, column, row):
         if self._matrix[column][row] == 0:

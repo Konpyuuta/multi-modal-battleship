@@ -4,6 +4,8 @@
 
 Represents a player
 '''
+from model.board.BattleshipMatrix import BattleshipMatrix
+
 
 class Player:
 
@@ -19,8 +21,10 @@ class Player:
 
     _heart_rate = None
 
-    def __init__(self):
-        pass
+    def __init__(self, name, is_turn, battleships: BattleshipMatrix):
+        self._name = name
+        self._is_turn = is_turn
+        self._battleships = battleships
 
     def set_name(self, name):
         self._name = name

@@ -7,5 +7,5 @@ from abc import ABC
 
 class State(ABC):
 
-    def make_move(self):
+    def handle_action(self, object):
         pass

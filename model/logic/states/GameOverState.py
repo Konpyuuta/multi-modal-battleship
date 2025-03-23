@@ -4,8 +4,15 @@
 
 @description Final state of the DFA, marks the end of the game, notify observers to display game over screen ..
 '''
+from model.GameHandler import GameHandler
+
 
 class GameOverState:
 
-    def __init__(self, player1, player2):
+    _game_handler = None
+    def __init__(self):
+        self._game_handler = GameHandler()
+
+
+    def handle_action(self, object):
         pass
