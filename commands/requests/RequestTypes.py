@@ -3,10 +3,10 @@
 @author Maurice Amon
 '''
 from abc import ABC
+from enum import Enum
 
 
-class RequestTypes(ABC):
+class RequestTypes(Enum):
 
-    move_request_type = "MOVE"
-
-    start_request_type = "START"
+    MOVE_REQUEST = "MOVE",
+    START_REQUEST = "START"

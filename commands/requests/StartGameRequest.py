@@ -17,7 +17,7 @@ class StartGameRequest(Request):
         super()
         self._playerID = playerID
         self._message = message
-        self._request_type = RequestTypes.start_request_type
+        self._request_type = RequestTypes.START_REQUEST
 
 
     def get_message(self):

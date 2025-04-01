@@ -9,26 +9,24 @@ from datetime import time
 from commands.MoveCommand import MoveCommand
 from commands.StartGameCommand import StartGameCommand
 from commands.requests.RequestTypes import RequestTypes
+from commands.requests.StartGameRequest import StartGameRequest
 
 
 class ClientRequestThread():
 
-    def handle_client(conn, addr):
+    def handle_client(conn, addr, request):
         print("[thread] starting")
 
         # get the client's message
-        message = conn.recv(2048)
-        message = message.decode()
-        request = json.loads(message)
+
         command = None
-        if request.get_request_type() == RequestTypes.move_request_type:
+        if type(request).__name__ == StartGameRequest.__name__:
+            command = StartGameCommand(request)
+        else:
             command = MoveCommand(request)
 
-        else:
-            command = StartGameCommand(request)
-
         command.execute()
-        print("[thread] client:", addr, 'recv:', message)
+        print("[thread] client:", addr, 'recv:', request.get_message())
 
         # 
         message = "Bye!"

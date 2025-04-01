@@ -2,7 +2,6 @@
 
 @author Maurice Amon
 '''
-from model.GameHandler import GameHandler
 from model.states.State import State
 
 
@@ -10,8 +9,8 @@ class FirstPlayerTurnState(State):
 
     _game_handler = None
 
-    def __init__(self):
-        self._game_handler = GameHandler()
+    def __init__(self, game_handler):
+        self._game_handler = game_handler
 
 
     def handle_action(self, coordinates):

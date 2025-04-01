@@ -16,12 +16,12 @@ class MoveRequest(Request):
 
     _is_valid = None
 
-    def __init__(self, request_type, playerID, col, row):
+    def __init__(self, request_type: RequestTypes, playerID, col, row):
         super()
         self._playerID = playerID
         self._col = col
         self._row = row
-        self._request_type = RequestTypes.move_request_type
+        self._request_type = RequestTypes.MOVE_REQUEST
 
     def set_is_valid(self, is_valid):
         self._is_valid = is_valid

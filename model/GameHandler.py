@@ -34,9 +34,9 @@ class GameHandler:
 
     def __init__(self):
         self._start_state = StartGameState()
-        self._turn_state = FirstPlayerTurnState()
-        self._second_player_turn_state = SecondPlayerTurnState()
-        self._game_over_state = GameOverState()
+        self._turn_state = FirstPlayerTurnState(self)
+        self._second_player_turn_state = SecondPlayerTurnState(self)
+        self._game_over_state = GameOverState(self)
         self._current_state = self._start_state
 
 

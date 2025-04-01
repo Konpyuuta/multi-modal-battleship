@@ -22,6 +22,6 @@ class StartGameCommand(Command):
         player1 = Player("Player 1", True, first_matrix)
         player2 = Player("Player 2", False, second_matrix)
         game = Game(player1, player2)
-        game_handler = GameHandler(game)
-        game_handler.handle()
+        game_handler = GameHandler()
+        #game_handler.handle()
 
