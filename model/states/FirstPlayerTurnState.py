@@ -2,6 +2,7 @@
 
 @author Maurice Amon
 '''
+import main
 from model.states.State import State
 
 
@@ -14,9 +15,22 @@ class FirstPlayerTurnState(State):
 
 
     def handle_action(self, coordinates):
-        if not self._game_handler.get_game().has_bomb_been_placed(coordinates[0]. coordinates[1]):
-            self._game_handler.get_game().execute_move(coordinates[0], coordinates[1])
+        if not self.is_player_turn(coordinates[0]):
+            self._game_handler.set_latest_state_description("It's not your turn!")
+            return False
+
+        if not self._game_handler.get_game().has_bomb_been_placed(coordinates[1]. coordinates[2]):
+            self._game_handler.get_game().execute_move(coordinates[1], coordinates[2])
             self._game_handler.set_current_state(self._game_handler.get_second_player_turn_state())
+            self._game_handler.set_latest_state_description("Move was successfully executed! ")
+        else:
+            self._game_handler.set_latest_state_description("A bomb has already been placed on this field!.")
+
 
         if self._game_handler.get_game().check_is_game_over():
             self._game_handler.set_current_state(self._game_handler.get_game_over_state())
+
+    def is_player_turn(self, player_id):
+        if main.player_list[0] == player_id:
+            return True
+        return False

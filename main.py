@@ -30,6 +30,9 @@ thread_pool = []
 ip = '127.0.0.1'
 port = 8080
 
+# registered players ..
+player_list = []
+
 
 # start the server ...
 #s = socket.socket()
@@ -40,64 +43,37 @@ port = 8080
 
 def process_client_requests(conn, addr):
     try:
-        while True:
-            print("Client:", addr)
-            client_msg = conn.recv(2048)
-            request = pickle.loads(client_msg)
-            print(type(request).__name__)
-            print(StartGameRequest.__name__)
-            if type(request).__name__ == StartGameRequest.__name__:
-                print("It is a valid request!")
-            t = threading.Thread(target=ClientRequestThread.handle_client, args=(conn, addr, request), daemon=True)
-            t.start()
-            thread_pool.append(t)
+        print("Client:", addr)
+        client_msg = conn.recv(2048)
+        request = pickle.loads(client_msg)
+        print(type(request).__name__)
+        print(StartGameRequest.__name__)
+        if type(request).__name__ == StartGameRequest.__name__:
+            print("It is a valid request!")
+        t = threading.Thread(target=ClientRequestThread.handle_client, args=(conn, addr, request), daemon=True)
+        t.start()
+        thread_pool.append(t)
     except KeyboardInterrupt:
         print("Stopped by Ctrl+C")
     finally:
-        '''if s:
-            s.close()
+        if conn:
+            conn.close()
         for t in thread_pool:
-            t.join()'''
+            t.join()
 
 def start_server():
     socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socket_server.bind((ip, port))
-
     # Server is ready for client requests..
     socket_server.listen()
-
-    conn, addr = socket_server.accept()
-    print('New client got connected ..')
-    # Process the request ..
-    process_client_requests(conn, addr)
-    myCounter = 0
     while True:
-        message = 'message ' + str(myCounter)
-        print('sending: ' + message)
-        sendTextViaSocket(message, conn)
-        myCounter += 1
-        time.sleep(1)
+        conn, addr = socket_server.accept()
+        print('New client got connected ..')
+        # Process the request ..
+        process_client_requests(conn, addr)
     # end while
 # end function
 
-def sendTextViaSocket(message, sock):
-    # encode the text message
-    encodedMessage = bytes(message, 'utf-8')
-
-    # send the data via the socket to the server
-    sock.sendall(encodedMessage)
-
-    # receive acknowledgment from the server
-    encodedAckText = sock.recv(1024)
-    ackText = encodedAckText.decode('utf-8')
-
-    # log if acknowledgment was successful
-    if ackText == "ACK_TEXT":
-        print('server acknowledged reception of text')
-    else:
-        print('error: server has sent back ' + ackText)
-    # end if
-# end function
 
 if __name__ == '__main__':
     start_server()

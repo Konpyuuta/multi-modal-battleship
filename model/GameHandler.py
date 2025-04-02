@@ -10,9 +10,11 @@ from model.logic.states.GameOverState import GameOverState
 from model.logic.states.StartGameState import StartGameState
 from model.states.FirstPlayerTurnState import FirstPlayerTurnState
 from model.states.SecondPlayerTurnState import SecondPlayerTurnState
+from observer.Observable import Observable
+from observer.Observer import Observer
 
 
-class GameHandler:
+class GameHandler(Observable):
 
     _game = None
 
@@ -25,6 +27,10 @@ class GameHandler:
     _game_over_state = None
 
     _current_state = None
+
+    _state_description = None
+
+    _observers = list()
 
 
     def __new__(cls):
@@ -49,7 +55,11 @@ class GameHandler:
             self._current_state.handle_action(object)
 
 
+    def get_latest_state_description(self):
+        return self._state_description
 
+    def set_latest_state_description(self, state_description):
+        self._state_description = state_description
 
     def get_game(self):
         return self._game
@@ -73,3 +83,13 @@ class GameHandler:
 
     def get_second_player_turn_state(self):
         return self._second_player_turn_state
+
+    def add_observer(self, observer: Observer) -> None:
+        self._observers.append(observer)
+
+    def remove_observer(self, observer: Observer) -> None:
+        self._observers.remove(observer)
+
+    def notify(self) -> None:
+        for observer in self._observers:
+            observer.update(self)

@@ -21,19 +21,9 @@ class ClientRequestThread():
 
         command = None
         if type(request).__name__ == StartGameRequest.__name__:
-            command = StartGameCommand(request)
+            command = StartGameCommand(request, conn)
         else:
-            command = MoveCommand(request)
+            command = MoveCommand(request, conn)
 
         command.execute()
-        print("[thread] client:", addr, 'recv:', request.get_message())
 
-        # 
-        message = "Bye!"
-        message = message.encode()
-        conn.send(message)
-        print("[thread] client:", addr, 'send:', message)
-
-        conn.close()
-
-        print("[thread] ending")
