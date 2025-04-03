@@ -9,6 +9,10 @@ from model.board.BattleshipMatrix import BattleshipMatrix
 
 class Player:
 
+    _ip = None
+
+    _port = None
+
     _name = None
 
     _is_turn = None
@@ -21,7 +25,9 @@ class Player:
 
     _heart_rate = None
 
-    def __init__(self, name, is_turn, battleships: BattleshipMatrix):
+    def __init__(self, ip, port, name, is_turn, battleships: BattleshipMatrix):
+        self._ip = ip
+        self._port = port
         self._name = name
         self._is_turn = is_turn
         self._battleships = battleships

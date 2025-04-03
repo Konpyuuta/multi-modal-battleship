@@ -10,5 +10,5 @@ from observer.Observable import Observable
 class Observer(ABC):
 
     @abstractmethod
-    def update(self, subject: Observable) -> None:
+    def update(self, observable: Observable) -> None:
         pass
