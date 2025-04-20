@@ -30,9 +30,6 @@ thread_pool = []
 ip = '127.0.0.1'
 port = 8080
 
-# registered players ..
-player_list = []
-
 
 # start the server ...
 #s = socket.socket()
@@ -56,8 +53,6 @@ def process_client_requests(conn, addr):
     except KeyboardInterrupt:
         print("Stopped by Ctrl+C")
     finally:
-        if conn:
-            conn.close()
         for t in thread_pool:
             t.join()
 

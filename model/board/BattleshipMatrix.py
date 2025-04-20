@@ -3,6 +3,7 @@
 @author Maurice Amon
 '''
 import os
+import random
 from random import randrange
 
 
@@ -43,35 +44,45 @@ class BattleshipMatrix():
 
     def create_battleships(self):
         for i in self._battleship_sizes:
-            positionX = randrange(10)
-            positionY = randrange(10)
-            coords = self.place_battleships(positionX, positionY, i)
+            coords = self.place_battleships(9, 9, i)
             self.insert_battleships(coords)
 
 
     def place_battleships(self, column, row, size):
         coordinates = []
-        if column+size < 10:
-            for i in range(size):
-                coordinates.append((column+i, row))
-        elif row+size < 10:
-            for i in range(size):
-                coordinates.append((column, row+i))
-        elif column-size < 10:
-            for i in range(size):
-                coordinates.append((column-i, row))
-        elif row-size < 10:
-            for i in range(size):
-                coordinates.append((column, row-i))
-        else:
-            self.place_battleships(randrange(10), randrange(10), size)
+        is_valid = False
+        while not is_valid:
+            direction = random.choice(["horizontal", "vertical"])
+            if direction == "horizontal":
+                col = random.randint(0, column - size)
+                r = random.randint(0, row)
+                print(f"r col {col}")
+                print(f"size {size}")
+                if all(self._matrix[r][col + i] == 0 for i in range(size)):
+                    is_valid = True
+                    for i in range(size):
+                        coordinates.append((r, col + i))
+                        print(f"column {col + i} row {r}")
+                    break
+
+            else:
+                r = random.randint(0, row - size)
+                col = random.randint(0, column)
+                print(f"r row {r}")
+                print(f"size {size}")
+                if all(self._matrix[r + i][col] == 0 for i in range(size)):
+                    is_valid = True
+                    for i in range(size):
+                        coordinates.append((r + i, col))
+                        print(f"column {col} row {r + i}")
+                    break
 
         return coordinates
 
     def insert_battleships(self, coords):
         for i, j in coords:
-            self._matrix[j][i] = 1
-
+            self._matrix[i][j] = 1
+        self.print_matrix()
 
     def print_matrix(self):
         st = ""

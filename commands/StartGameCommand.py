@@ -4,13 +4,14 @@
 '''
 
 import pickle
+import time
 
-import main
 from commands.Command import Command
 from commands.requests.StartGameRequest import StartGameRequest
 from model.Game import Game
 from model.GameHandler import GameHandler
 from model.Player import Player
+from model.PlayerPool import PlayerPool
 from model.board.BattleshipMatrix import BattleshipMatrix
 
 
@@ -27,12 +28,14 @@ class StartGameCommand(Command):
     def execute(self):
         first_matrix = BattleshipMatrix()
         second_matrix = BattleshipMatrix()
-        player1 = Player("Player 1", True, first_matrix)
-        player2 = Player("Player 2", False, second_matrix)
-        main.player_list.append(self._start_request.get_playerID())
+        counter = 10
+
+        #player1 = Player("Player 1", True, first_matrix)
+        #player2 = Player("Player 2", False, second_matrix)
+        PlayerPool._player_pool.append(self._start_request.get_playerID())
         self.update_client()
-        game = Game(player1, player2)
-        game_handler = GameHandler()
+        #game = Game(player1, player2)
+        #game_handler = GameHandler()
         #game_handler.handle()
 
     def update_client(self):

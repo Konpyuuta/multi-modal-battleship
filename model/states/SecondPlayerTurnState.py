@@ -2,7 +2,7 @@
 
 @author Maurice Amon
 '''
-import main
+from model.PlayerPool import PlayerPool
 from model.states.State import State
 
 
@@ -31,6 +31,6 @@ class SecondPlayerTurnState(State):
             self._game_handler.set_current_state(self._game_handler.get_game_over_state())
 
     def is_player_turn(self, player_id):
-        if main.player_list[1] == player_id:
+        if PlayerPool._player_pool[1] == player_id:
             return True
         return False

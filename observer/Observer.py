@@ -4,11 +4,9 @@
 '''
 from abc import ABC, abstractmethod
 
-from observer.Observable import Observable
-
 
 class Observer(ABC):
 
     @abstractmethod
-    def update(self, observable: Observable) -> None:
+    def update(self, observable) -> None:
         pass
