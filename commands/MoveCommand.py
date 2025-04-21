@@ -19,21 +19,14 @@ class MoveCommand(Command):
 
 
     def execute(self):
-        game_handler = GameHandler(None)
+        game_handler = GameHandler()
         column = self._move_request.getCol()
         row = self._move_request.getRow()
         request_list = (self._move_request.getPlayerID(), column, row)
         game_handler.handle(request_list)
-
-
-    def update_client(self, game_handler: GameHandler):
-        battleship_matrix = BattleshipMatrix()
-        battleship_matrix.create_battleships()
-        message = pickle.dumps(battleship_matrix)
-        self._conn.send(message)
-        print("Initialized Battleship matrix has been sent to the client: ")
-        battleship_matrix.print_matrix()
         self._conn.close()
+
+
 
 
 

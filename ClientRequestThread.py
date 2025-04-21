@@ -23,11 +23,12 @@ class ClientRequestThread():
         # get the client's message
 
         command = None
-        if type(request).__name__ == StartGameRequest.__name__:
+        req_type = request.get_request_type()
+        if req_type == RequestTypes.START_REQUEST:
             command = StartGameCommand(request, conn)
-        elif type(request).__name__ == MoveRequest.__name__:
+        elif req_type == RequestTypes.MOVE_REQUEST:
             command = MoveCommand(request, conn)
-        elif type(request).__name__ == FetchGameStateRequest.__name__:
+        elif req_type == RequestTypes.FETCH_REQUEST:
             command = FetchGameStateCommand(request, conn)
 
         command.execute()
