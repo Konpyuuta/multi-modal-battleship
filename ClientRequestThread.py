@@ -24,9 +24,7 @@ class ClientRequestThread():
 
         command = None
         req_type = request.get_request_type()
-        if req_type == RequestTypes.START_REQUEST:
-            command = StartGameCommand(request, conn)
-        elif req_type == RequestTypes.MOVE_REQUEST:
+        if req_type == RequestTypes.MOVE_REQUEST:
             command = MoveCommand(request, conn)
         elif req_type == RequestTypes.FETCH_REQUEST:
             command = FetchGameStateCommand(request, conn)

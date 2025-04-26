@@ -6,15 +6,16 @@
              Uses a deterministic finite Automaton (DFA) to implement the rules.
              Takes an input from the socket-stream to trigger the rule-enforcement.
 '''
-from model.logic.states.GameOverState import GameOverState
-from model.logic.states.StartGameState import StartGameState
+from Singleton import Singleton
 from model.states.FirstPlayerTurnState import FirstPlayerTurnState
+from model.states.GameOverState import GameOverState
 from model.states.SecondPlayerTurnState import SecondPlayerTurnState
+from model.states.StartGameState import StartGameState
 from observer.Observable import Observable
 from observer.Observer import Observer
 
 
-class GameHandler(Observable):
+class GameHandler(metaclass=Singleton):
 
     _game = None
 
@@ -30,29 +31,26 @@ class GameHandler(Observable):
 
     _state_description = None
 
-    _observers = list()
+    _initialized = False
 
-
-    def __new__(cls):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(GameHandler, cls).__new__(cls)
-        return cls.instance
 
     def __init__(self):
-        self._start_state = StartGameState()
-        self._turn_state = FirstPlayerTurnState(self)
-        self._second_player_turn_state = SecondPlayerTurnState(self)
-        self._game_over_state = GameOverState(self)
-        self._current_state = self._start_state
+        if not self._initialized:
+            self._start_state = StartGameState(self)
+            self._turn_state = FirstPlayerTurnState(self)
+            self._second_player_turn_state = SecondPlayerTurnState(self)
+            self._game_over_state = GameOverState(self)
+            self._current_state = self._start_state
+            self._initialized = True
 
 
     def set_game(self, game):
         self._game = game
 
     def handle(self, object):
-        is_game_over = False
-        while not is_game_over:
-            self._current_state.handle_action(object)
+        print("Execute Action")
+        print(self._current_state)
+        self._current_state.handle_action(object)
 
 
     def get_latest_state_description(self):
@@ -84,12 +82,3 @@ class GameHandler(Observable):
     def get_second_player_turn_state(self):
         return self._second_player_turn_state
 
-    def add_observer(self, observer: Observer) -> None:
-        self._observers.append(observer)
-
-    def remove_observer(self, observer: Observer) -> None:
-        self._observers.remove(observer)
-
-    def notify(self) -> None:
-        for observer in self._observers:
-            observer.update(self)

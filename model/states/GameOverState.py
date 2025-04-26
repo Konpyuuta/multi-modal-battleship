@@ -7,9 +7,9 @@ from model.states.State import State
 
 class GameOverState(State):
 
-    def __init__(self):
-        pass
+    def __init__(self, game_handler):
+        self._game_handler = game_handler
 
 
     def handle_action(self, object):
-        pass
+        game = self._game_handler.get_game()

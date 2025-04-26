@@ -15,11 +15,14 @@ class FirstPlayerTurnState(State):
 
 
     def handle_action(self, coordinates):
-        if not self.is_player_turn(coordinates[0]):
+        print(f"ID: {coordinates[0]}")
+        print(f"Current Player: {self._game_handler.get_game().get_player1().get_name()}")
+        if not coordinates[0] == self._game_handler.get_game().get_player1().get_name():
             self._game_handler.set_latest_state_description("It's not your turn!")
             return False
 
-        if not self._game_handler.get_game().has_bomb_been_placed(coordinates[1]. coordinates[2]):
+
+        if not self._game_handler.get_game().get_player2_battleship_matrix().has_bomb_been_placed(coordinates[1], coordinates[2]):
             self._game_handler.get_game().execute_move(coordinates[1], coordinates[2])
             self._game_handler.set_current_state(self._game_handler.get_second_player_turn_state())
             self._game_handler.set_latest_state_description("Move was successfully executed! ")

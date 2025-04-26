@@ -14,7 +14,7 @@ class BattleshipMatrix():
     # -1: No ship, a bomb landed. 1: A ship is there. 2: A ship is there and a bomb landed on it.
     _matrix = None
     # All different sizes of battleships ..
-    _battleship_sizes = [5, 5, 4, 3, 3, 2, 2]
+    _battleship_sizes = [2, 2]
 
     def __init__(self):
         rows, columns = (10, 10)
@@ -56,25 +56,19 @@ class BattleshipMatrix():
             if direction == "horizontal":
                 col = random.randint(0, column - size)
                 r = random.randint(0, row)
-                print(f"r col {col}")
-                print(f"size {size}")
                 if all(self._matrix[r][col + i] == 0 for i in range(size)):
                     is_valid = True
                     for i in range(size):
                         coordinates.append((r, col + i))
-                        print(f"column {col + i} row {r}")
                     break
 
             else:
                 r = random.randint(0, row - size)
                 col = random.randint(0, column)
-                print(f"r row {r}")
-                print(f"size {size}")
                 if all(self._matrix[r + i][col] == 0 for i in range(size)):
                     is_valid = True
                     for i in range(size):
                         coordinates.append((r + i, col))
-                        print(f"column {col} row {r + i}")
                     break
 
         return coordinates

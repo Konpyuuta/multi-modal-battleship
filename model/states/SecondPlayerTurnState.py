@@ -15,13 +15,13 @@ class SecondPlayerTurnState(State):
 
 
     def handle_action(self, coordinates):
-        if not self.is_player_turn(coordinates[0]):
+        if not coordinates[0] == self._game_handler.get_game().get_player2().get_name():
             self._game_handler.set_latest_state_description("It's not your turn!")
             return False
 
-        if not self._game_handler.get_game().has_bomb_been_placed(coordinates[1]. coordinates[2]):
+        if not self._game_handler.get_game().get_player1_battleship_matrix().has_bomb_been_placed(coordinates[1], coordinates[2]):
             self._game_handler.get_game().execute_move(coordinates[1], coordinates[2])
-            self._game_handler.set_current_state(self._game_handler.get_second_player_turn_state())
+            self._game_handler.set_current_state(self._game_handler.get_turn_state())
             self._game_handler.set_latest_state_description("Move was successfully executed! ")
         else:
             self._game_handler.set_latest_state_description("A bomb has already been placed on this field!.")
@@ -31,6 +31,6 @@ class SecondPlayerTurnState(State):
             self._game_handler.set_current_state(self._game_handler.get_game_over_state())
 
     def is_player_turn(self, player_id):
-        if PlayerPool._player_pool[1] == player_id:
+        if PlayerPool._player_pool[0] == player_id:
             return True
         return False
