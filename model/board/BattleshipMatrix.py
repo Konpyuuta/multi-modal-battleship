@@ -15,18 +15,19 @@ class BattleshipMatrix():
     _matrix = None
     # All different sizes of battleships
     _battleship_sizes = [2, 2, 4, 5, 5, 4]
+    # Store the coordinates of all ships
+    _ships = []
 
     def __init__(self):
         rows, columns = (10, 10)
         self._matrix = [[0 for i in range(columns)] for j in range(rows)]
-
+        self._ships = []
 
     def get_matrix(self):
         return self._matrix
 
     def set_matrix(self, matrix):
         self._matrix = matrix
-
 
     def has_bomb_been_placed(self, column, row):
         if self._matrix[column][row] == -1 or self._matrix[column][row] == 2:
@@ -38,8 +39,22 @@ class BattleshipMatrix():
             self._matrix[column][row] = -1
             return False
         elif self._matrix[column][row] == 1:
-            self._matrix[column][row] = 2
+            # find which ship this cell belongs to
+            ship_coords = self.find_ship_by_coord(column, row)
+            if ship_coords:
+                # sink the entire ship
+                for ship_row, ship_col in ship_coords:
+                    self._matrix[ship_row][ship_col] = 2
+            #     self._ships.remove(ship_coords)
+            # self._matrix[column][row] = 2
             return True
+
+    def find_ship_by_coord(self, column, row):
+        """Find the ship coordinates by the given cell coordinates"""
+        for ship in self._ships:
+            if (column, row) in ship:
+                return ship
+        return None
 
     def create_battleships(self):
         for i in self._battleship_sizes:
@@ -135,6 +150,10 @@ class BattleshipMatrix():
         return coordinates
 
     def insert_battleships(self, coords):
+        # Store the coordinates of the ship
+        if coords:
+            self._ships.append(coords)
+
         for i, j in coords:
             self._matrix[i][j] = 1
         self.print_matrix()
