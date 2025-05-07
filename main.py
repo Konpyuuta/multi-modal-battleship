@@ -86,23 +86,59 @@ def process_client_requests(conn, addr):
             t.join()
 
 def start_server():
-    socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket_server.bind((ip, port))
-    # Server is ready for client requests..
-    socket_server.listen()
-    while True:
-        conn, addr = socket_server.accept()
-        # Process the request ..
-        process_client_requests(conn, addr)
-    # end while
-# end function
+    try:
+        print(f"Creating game server socket on {ip}:{port}")
+        socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #socket_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            print(f"Binding game server to {ip}:{port}")
+            socket_server.bind((ip, port))
+            print(f"Successfully bound to {ip}:{port}")
+        except Exception as e:
+            print(f"ERROR BINDING GAME SERVER: {e}")
+            return
+
+        # Server is ready for client requests
+        print(f"Game server listening on {ip}:{port}")
+        socket_server.listen()
+
+        print("Entering main connection acceptance loop")
+        while True:
+            print("Waiting for client connection...")
+            conn, addr = socket_server.accept()
+            print(f"Game server received connection from {addr}")
+            # Process the request
+            process_client_requests(conn, addr)
+
+    except Exception as e:
+        print(f"CRITICAL ERROR IN GAME SERVER: {e}")
+        import traceback
+        traceback.print_exc()
 
 
+# In your server-side main.py
 if __name__ == '__main__':
-    hr_server = HeartRateServer(ip)
-    hr_server.start()
+    print("Starting Battleship game servers...")
 
-    start_server()
+    # Start heart rate server in a dedicated thread
+    hr_thread = threading.Thread(target=lambda: HeartRateServer(ip).start(), daemon=True)
+    hr_thread.start()
+    print("Heart rate server started in background thread")
+
+    # Give it a moment to initialize
+    time.sleep(1)
+
+    # Start the main game server in its own dedicated thread
+    game_thread = threading.Thread(target=start_server, daemon=True)
+    game_thread.start()
+    print("Game server started in background thread")
+
+    # Keep the main thread alive
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Shutting down servers...")
 
 
 
