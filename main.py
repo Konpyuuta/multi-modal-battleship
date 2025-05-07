@@ -12,6 +12,7 @@ import socket
 
 from ClientRequestThread import ClientRequestThread
 from commands.StartGameCommand import StartGameCommand
+from commands.requests.RequestTypes import RequestTypes
 from commands.requests.Request import Request
 from commands.requests.StartGameRequest import StartGameRequest
 from model.Player import Player
@@ -65,7 +66,12 @@ def process_client_requests(conn, addr):
     try:
         client_msg = conn.recv(2048)
         request = pickle.loads(client_msg)
-        if not game_not_started:
+
+        if hasattr(request, 'get_request_type') and request.get_request_type() == RequestTypes.HEART_RATE:
+            t = threading.Thread(target=ClientRequestThread.handle_client, args=(conn, addr, request), daemon=True)
+            t.start()
+            thread_pool.append(t)
+        elif not game_not_started:
             t = threading.Thread(target=ClientRequestThread.handle_client, args=(conn, addr, request), daemon=True)
             t.start()
             thread_pool.append(t)
