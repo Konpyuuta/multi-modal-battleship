@@ -17,6 +17,8 @@ from commands.requests.Request import Request
 from commands.requests.StartGameRequest import StartGameRequest
 from model.Player import Player
 from model.board.BattleshipMatrix import BattleshipMatrix
+from commands.heart_rate.HeartRateServer import HeartRateServer
+
 #data = Player()
 #data.set_name("Mauzi")
 #data_string = pickle.dumps(data)
@@ -97,6 +99,9 @@ def start_server():
 
 
 if __name__ == '__main__':
+    hr_server = HeartRateServer(ip)
+    hr_server.start()
+
     start_server()
 
 
