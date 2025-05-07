@@ -1,5 +1,5 @@
 '''
-@author [Your Name]
+@author Alessia Bussard
 @description Server-side response for heart rate requests
 '''
 
