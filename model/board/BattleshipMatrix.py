@@ -13,8 +13,8 @@ class BattleshipMatrix():
     # 0: No ship, no bomb landed.
     # -1: No ship, a bomb landed. 1: A ship is there. 2: A ship is there and a bomb landed on it.
     _matrix = None
-    # All different sizes of battleships
-    _battleship_sizes = [2, 2, 4, 5, 5, 4]
+    # All different sizes of battleships ..
+    _battleship_sizes = [2, 2]
 
     def __init__(self):
         rows, columns = (10, 10)
@@ -41,96 +41,35 @@ class BattleshipMatrix():
             self._matrix[column][row] = 2
             return True
 
+
     def create_battleships(self):
         for i in self._battleship_sizes:
             coords = self.place_battleships(9, 9, i)
             self.insert_battleships(coords)
 
-    def is_valid_placement(self, row, col, size, direction):
-        """Check if a ship can be placed at the given position with proper spacing"""
-        if direction == "horizontal":
-            # Check if ship fits in bounds
-            if col + size > 10:
-                return False
-
-            # Check the ship position and surrounding area (excluding diagonal)
-            for i in range(size):
-                # Check the ship cell itself
-                if self._matrix[row][col + i] != 0:
-                    return False
-
-                # Check surrounding cells (up, down, left, right)
-                # Up
-                if row > 0 and self._matrix[row - 1][col + i] != 0:
-                    return False
-                # Down
-                if row < 9 and self._matrix[row + 1][col + i] != 0:
-                    return False
-                # Left
-                if i == 0 and col > 0 and self._matrix[row][col - 1] != 0:
-                    return False
-                # Right
-                if i == size - 1 and col + size < 10 and self._matrix[row][col + size] != 0:
-                    return False
-
-        else:  # vertical
-            # Check if ship fits in bounds
-            if row + size > 10:
-                return False
-
-            # Check the ship position and surrounding area (excluding diagonal)
-            for i in range(size):
-                # Check the ship cell itself
-                if self._matrix[row + i][col] != 0:
-                    return False
-
-                # Check surrounding cells (up, down, left, right)
-                # Left
-                if col > 0 and self._matrix[row + i][col - 1] != 0:
-                    return False
-                # Right
-                if col < 9 and self._matrix[row + i][col + 1] != 0:
-                    return False
-                # Up
-                if i == 0 and row > 0 and self._matrix[row - 1][col] != 0:
-                    return False
-                # Down
-                if i == size - 1 and row + size < 10 and self._matrix[row + size][col] != 0:
-                    return False
-
-        return True
 
     def place_battleships(self, column, row, size):
         coordinates = []
         is_valid = False
-        attempts = 0
-        max_attempts = 1000  # Limit attempts to avoid infinite loop
-
-        while not is_valid and attempts < max_attempts:
+        while not is_valid:
             direction = random.choice(["horizontal", "vertical"])
-
             if direction == "horizontal":
                 col = random.randint(0, column - size)
                 r = random.randint(0, row)
-
-                if self.is_valid_placement(r, col, size, "horizontal"):
+                if all(self._matrix[r][col + i] == 0 for i in range(size)):
                     is_valid = True
                     for i in range(size):
                         coordinates.append((r, col + i))
+                    break
 
-            else: # vertical
+            else:
                 r = random.randint(0, row - size)
                 col = random.randint(0, column)
-
-                if self.is_valid_placement(r, col, size, "vertical"):
+                if all(self._matrix[r + i][col] == 0 for i in range(size)):
                     is_valid = True
                     for i in range(size):
                         coordinates.append((r + i, col))
-
-            attempts += 1
-
-        if not is_valid:
-            print(f"Could not place battleship of size {size} after {max_attempts} attempts.")
+                    break
 
         return coordinates
 

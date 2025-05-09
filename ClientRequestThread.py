@@ -26,19 +26,8 @@ class ClientRequestThread():
         req_type = request.get_request_type()
         if req_type == RequestTypes.MOVE_REQUEST:
             command = MoveCommand(request, conn)
-
         elif req_type == RequestTypes.FETCH_REQUEST:
             command = FetchGameStateCommand(request, conn)
-
-        elif req_type == RequestTypes.HEART_RATE:
-            # Handle heart rate request
-            heart_rate = request.get_heart_rate()
-            print(f"Received heart rate: {heart_rate} BPM from {addr}")
-
-            import pickle
-            conn.send(pickle.dumps("Heart rate received successfully"))
-
-            return
 
         command.execute()
 

@@ -11,16 +11,27 @@ class FetchGameStateRequest(Request):
 
     _playerID = None
 
-    _request_type = None
+    _message = None
 
-    def __init__(self, request_type: RequestTypes, playerID):
+    _heart_rate = None
+
+    def __init__(self, playerID, message: str):
         super()
         self._playerID = playerID
-        self._request_type = RequestTypes.MOVE_REQUEST
+        self._message = message
+        self._request_type = RequestTypes.FETCH_REQUEST
 
+    def set_heart_rate(self, heart_rate):
+        self._heart_rate = heart_rate
+
+    def get_heart_rate(self):
+        return self._heart_rate
+
+    def get_message(self):
+        return self._message
 
     def getPlayerID(self):
         return self._playerID
 
-    def getRequestType(self):
+    def get_request_type(self):
         return self._request_type

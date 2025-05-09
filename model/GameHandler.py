@@ -13,7 +13,6 @@ from model.states.SecondPlayerTurnState import SecondPlayerTurnState
 from model.states.StartGameState import StartGameState
 from observer.Observable import Observable
 from observer.Observer import Observer
-from commands.requests.RequestTypes import RequestTypes
 
 
 class GameHandler(metaclass=Singleton):
@@ -34,8 +33,6 @@ class GameHandler(metaclass=Singleton):
 
     _initialized = False
 
-    _heart_rate_handler = None
-
 
     def __init__(self):
         if not self._initialized:
@@ -46,9 +43,6 @@ class GameHandler(metaclass=Singleton):
             self._current_state = self._start_state
             self._initialized = True
 
-            from model.HeartRateHandler import HeartRateHandler
-            self._heart_rate_handler = HeartRateHandler(self)
-
 
     def set_game(self, game):
         self._game = game
@@ -57,20 +51,6 @@ class GameHandler(metaclass=Singleton):
         print("Execute Action")
         print(self._current_state)
         self._current_state.handle_action(object)
-
-    def handle_request(self, request, player_id):
-        request_type = request.get_type()
-        # Heart rate requests don't affect game state
-        if request_type == RequestTypes.HEART_RATE:
-            return self._heart_rate_handler.handle(request, player_id)
-        else:
-            # For regular game actions, use the state machine
-            self.handle(request)
-
-            # Return a response based on the current state
-            # You'll need to implement appropriate Response classes
-            from model.responses.Response import Response
-            return Response(request_type, True, self._state_description)
 
 
     def get_latest_state_description(self):

@@ -23,9 +23,7 @@ class Player:
 
     _opponent_battleship_matrix = None
 
-    _heart_rate = None
-
-    _heart_rate_timestamp = None
+    _heart_rate = 0.0
 
     def __init__(self, ip, port, name, is_turn, battleships: BattleshipMatrix):
         self._ip = ip
@@ -33,8 +31,6 @@ class Player:
         self._name = name
         self._is_turn = is_turn
         self._battleships = battleships
-        self._heart_rate = 0
-        self._heart_rate_timestamp = 0
 
     def set_name(self, name):
         self._name = name
@@ -54,21 +50,7 @@ class Player:
 
 
     def set_heart_rate(self, heart_rate):
-        import time
         self._heart_rate = heart_rate
-        self._heart_rate_timestamp = time.time()
-
-    def get_heart_rate(self):
-        return self._heart_rate
-
-    def get_heart_rate_timestamp(self):
-        return self._heart_rate_timestamp
-
-    def get_heart_rate_age(self):
-        import time
-        if self._heart_rate_timestamp == 0:
-            return float('inf')
-        return time.time() - self._heart_rate_timestamp
 
     def get_name(self):
         return self._name
