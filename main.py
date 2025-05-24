@@ -28,7 +28,7 @@ thread_pool = []
 
 # constants for the server ...
 
-ip = '127.0.0.1'
+ip = '172.20.10.5'
 port = 8080
 
 is_started = False
